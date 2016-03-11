@@ -1,10 +1,9 @@
 <?php
 
-namespace DAO;
 
 class BaseDAO
 {
-	protected $sql;
+	public $sql;
 	private $entity;
 	private $columnValues;
 	
@@ -13,11 +12,68 @@ class BaseDAO
 	}
 	
 	public function insert($arrayValues){
-		$this->sql = "INSERT INTO " . $this->entity ."(";
-		$fields = "";	
+		$this->loadValues($arrayValues);
+		$this->sql = "INSERT INTO " . $this->entity ."(";		
+				
+		// monta string conendo nomes de colunas e outra de valores
+		$columns = implode(', ', array_keys($this->columnValues));
+		$values  = implode(', ', array_values($this->columnValues));
+		$this->sql .= $columns . ')';
+		$this->sql .= " values ({$values})";
+		return $this->sql;
+	}
+
+
+	public function delete($id){
+		$this->sql = "DELETE FROM {$this->entity}";
+		// retorna a clausula WHERE do objeto $this->criteria
+		if(isset($id)){
+			$this->sql .= ' WHERE id = ' . $id;
+		}
+		return $this->sql;
+	}
+
+
+	public function update($arrayValues){
+		$this->loadValues($arrayValues);
 		
+		$this->sql = "UPDATE " . $this->entity;		
+		// monta string conendo nomes de colunas e outra de valores
+		// monta pares : coluna=valor
+		if($this->columnValues){
+			foreach($this->columnValues as $col => $val){
+				if($col!='id'){
+					$set[] = "{$col} = {$val}";
+				}
+			}
+		}		
+		$this->sql .= ' SET ' . implode(', ', $set);
+		$this->sql .= ' WHERE id = ' . $this->columnValues['id'];		
+		return $this->sql;
+	}
+
+
+	public function select($arrayColumns = '*', $query = null){
+		$this->sql = "SELECT ";
+		// Monta String com nomes das colunas
+		if(is_array($arrayColumns)){
+			$this->sql .= implode(',',$arrayColumns);
+		}else{
+			$this->sql .= $arrayColumns;
+		}
+		$this->sql .= ' FROM ' . $this->entity;
+		
+		// obtem as propriedades WHERE do objeto
+		if(isset($query)){
+			$this->sql .= ' WHERE ' . $query;
+		}
+		return $this->sql;
+	}
+	
+	private function loadValues($arrayValues){
+		$fields = array();
 		foreach ($arrayValues as $field => $value){
-			// verifica se Ã© valor excalar (string, inteiro ...)
+			// verifica se e valor excalar (string, inteiro ...)
 			if(is_scalar($value)){
 				if(is_string($value) AND (!empty($value))){
 					// adiciona  \ em aspas
@@ -36,30 +92,6 @@ class BaseDAO
 					$this->columnValues[$field] = "NULL";
 				}
 			}
-		}	
-		// monta string conendo nomes de colunas e outra de valores
-		$columns = implode(', ', array_keys($this->columnValues));
-		$values  = implode(', ', array_values($this->columnValues));
-		$this->sql .= $columns . ')';
-		$this->sql .= " values ({$values})";		
-	}
-
-
-	public function delete($id){
-	
-	}
-
-
-	public function update($array){
-	
-	}
-	
-	public function getList(){
-		$this->sql = "SELECT * FROM " . $this->entity;
-	}
-
-
-	public function select($id){
-	
+		}
 	}
 }

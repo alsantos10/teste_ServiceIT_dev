@@ -1,8 +1,7 @@
 <?php
 
-namespace Bean;
 
-class PedidoBean
+class Pedido
 {
 	private $idProduto;
 	private $idCliente;

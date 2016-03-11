@@ -1,8 +1,7 @@
 <?php
 
-namespace Bean;
 
-class ClienteBean 
+class Cliente
 {
 	private $id;
 	private $nome;

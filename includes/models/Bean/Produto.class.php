@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Classe ProdutosBean
+ * Classe Produto
  * @author Andre
  *
  */
-namespace Bean;
 
-class ProdutoBean
+class Produto
 {
 	private $id;
 	private $nome;

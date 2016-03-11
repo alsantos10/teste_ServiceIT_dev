@@ -13,9 +13,9 @@ final class Connection
 	 */
 	public static function open($name){
 		// verifica se existe arquivo de configuração para este BD
-		if(file_exists("config/{$name}.ini")){
+		if(file_exists( dirname(__FILE__) . "/../../config/{$name}.ini")){
 			// lê o INI e retorna um array()
-			$db = parse_ini_file("../../config/{$name}.ini");
+			$db = parse_ini_file( dirname(__FILE__) .  "/../../config/{$name}.ini");
 		}
 		else{
 			// se não existir, lança um erro
