@@ -27,24 +27,24 @@ echo '<br>';
 echo '________________________________';
 echo '<br>';
 
-
-$c = new Cliente();
-$c->setId(2);
-$c->setNome("Mariana Bota Um");
-$c->setEmail("mariana@teste.com");
-$c->setTelefone('4568-6666');
-
-echo '<pre>';
-echo $c->getId();echo '<br />';
-echo $c->getNome();echo '<br />';
-echo $c->getEmail();echo '<br />';
-echo $c->getTelefone();echo '<br />';
-
-$cDao = new ClienteDAO();
-$cDao->excluir(2);
-
-$cs = $cDao->getList();
-echo '<pre>';
-var_dump($cs);
+//
+//$c = new Cliente();
+//$c->setId(2);
+//$c->setNome("Mariana Bota Um");
+//$c->setEmail("mariana@teste.com");
+//$c->setTelefone('4568-6666');
+//
+//echo '<pre>';
+//echo $c->getId();echo '<br />';
+//echo $c->getNome();echo '<br />';
+//echo $c->getEmail();echo '<br />';
+//echo $c->getTelefone();echo '<br />';
+//
+//$cDao = new ClienteDAO();
+//$cDao->excluir(2);
+//
+//$cs = $cDao->getList();
+//echo '<pre>';
+//var_dump($cs);
 
 

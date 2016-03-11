@@ -1,0 +1,17 @@
+<Files ~ "^\.(htaccess|htpasswd)$">
+deny from all
+</Files>
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^(www\.localhost:8080)(:80)? [NC]
+RewriteRule ^(.*) http://localhost:8080/$1 [R=301,L]
+
+RewriteRule ^(.*)$ includes/controllers/router.php?class=$1 [NC,L]
+
+DirectoryIndex index.php       
+order deny,allow
+
+#RewriteRule ^(.*)$ includes/controllers/router.php?class=$1 [R=301,L]
+#RewriteRule ^([A-Za-z-])+$ /includes/controllers/router.php?class=$1 [NC,L]
+#RewriteRule ^([^/]*)\/([^/]*)$ /includes/controllers/router.php?class=$1&action=$2%{QUERY_STRING} [L]
+#RewriteRule ^([^/]*)\/([^/]*)\/([0-9]+)$ /includes/controllers/router.php?class=$1&action=$2&id=$3%{QUERY_STRING} [L]
+#order deny,allow
