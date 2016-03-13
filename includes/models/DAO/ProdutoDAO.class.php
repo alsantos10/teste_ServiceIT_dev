@@ -13,23 +13,27 @@ class ProdutoDAO extends BaseDAO
 		$dados = $this->bindData($produto);
 		if($produto->getId() != null){
 			$this->update($dados);
-			$action = 'Alterado(s)';
+			$action = 'Alterado';
 		}else{
 			$this->insert($dados);
-			$action = 'Inserido(s)';
+			$action = 'Inserido';
 		}
 		
 		if(!empty($this->sql)){
-			try {				
+			try {	
+				$id = null;
 				$this->conn = Connection::open('config');
 				$stmt = $this->conn->prepare($this->sql);
 				if($stmt){
 					$rowAffect = $stmt->execute();
+					$id = ($produto->getId() != null)?$produto->getId():$this->conn->lastInsertId();
 				}
 				$this->conn = null;
-				print("$action $rowAffect registro(s).\n");
+				$this->mensagem = array("$action $rowAffect registro.", 'success');
+				return $id;
 			} catch (Exception $e) {
-				print("Error {$e->getMessage()}.\n");
+				//print("Error {$e->getMessage()}.\n");
+				$this->mensagem = array("Ocorreu um erro de conexão. Tente novamente mais tarde", 'warning');
 			}
 		}		
 	}
@@ -41,17 +45,20 @@ class ProdutoDAO extends BaseDAO
 			$stmt =  $this->conn->prepare($this->sql);	
 			$stmt->execute();
 			$row = $stmt->fetch(PDO::FETCH_OBJ);
-			
+			$count = $stmt->rowCount();
 			$p = new Produto();
-			$p->setId($row->id);
-			$p->setNome($row->nome);
-			$p->setDescricao($row->descricao);
-			$p->setPreco($row->preco);			
+			if($count>0){
+				$p->setId($row->id);
+				$p->setNome($row->nome);
+				$p->setDescricao($row->descricao);
+				$p->setPreco($row->preco);
+			}
 			$this->conn = null;
 				
 			return $p;
 		} catch (Exception $e) {
-			print("Error {$e->getMessage()}.\n");
+			//print("Error {$e->getMessage()}.\n");
+			$this->mensagem = array("Ocorreu um erro de conexão. Tente novamente mais tarde", 'warning');
 		}		
 	}
 	
@@ -74,7 +81,8 @@ class ProdutoDAO extends BaseDAO
 			$this->conn = null;			
 			return $produtos;
 		} catch (Exception $e) {
-			print("Error {$e->getMessage()}.\n");
+			//print("Error {$e->getMessage()}.\n");
+			$this->mensagem = array("Ocorreu um erro de conexão. Tente novamente mais tarde", 'warning');
 		}		
 	}
 	
@@ -90,9 +98,10 @@ class ProdutoDAO extends BaseDAO
 					$rowAffect = $stmt->execute();
 				}
 				$this->conn = null;
-				print("Excuído(s) $rowAffect registro(s).\n");
+				$this->mensagem = array("Excluído $rowAffect registro.", 'success');
 			} catch (Exception $e) {
-				print("Error {$e->getMessage()}.\n");
+				//print("Error {$e->getMessage()}.\n");
+				$this->mensagem = array("Ocorreu um erro de conexão. Tente novamente mais tarde", 'warning');
 			}
 		}
 	}

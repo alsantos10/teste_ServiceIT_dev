@@ -3,23 +3,22 @@
 
 class Pedido
 {
-	private $idProduto;
-	private $idCliente;
+	private $produto;
+	private $cliente;
 	private $dataPedido;
 	
 	
-	public function getIdProduto(){
-		return $this->idProduto;
+	public function getProduto(){
+		return $this->produto;
 	}
-	public function setIdProduto($id){
-		$this->idProduto = $id;
+	public function setProduto(Produto $produto){
+		$this->produto = $produto;
+	}	
+	public function getCliente(){
+		return $this->cliente;
 	}
-	
-	public function getIdCliente(){
-		return $this->idCliente;
-	}
-	public function setIdCliente($id){
-		$this->idCliente = $id;
+	public function setCliente(Cliente $cliente){
+		$this->cliente = $cliente;
 	}
 	
 	public function getDataPedido(){

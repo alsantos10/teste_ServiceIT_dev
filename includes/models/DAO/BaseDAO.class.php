@@ -6,9 +6,11 @@ class BaseDAO
 	public $sql;
 	private $entity;
 	private $columnValues;
+	public $mensagem;
 	
 	public function __construct($entity){
 		$this->entity 	= $entity;
+		$this->mensagem = null;
 	}
 	
 	public function insert($arrayValues){
